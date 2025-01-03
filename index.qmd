@@ -312,8 +312,7 @@ tabla <- reactable(
     svg_uri <- base64enc::dataURI(file = svg, mime = "image/svg+xml")
     unlink(svg)
     
-    # Insertar SVG embebido
-    htmltools::tags$img(src = svg_uri, style = "width: 100%; height: auto;")
+htmltools::tags$img(src = svg_uri, style = "width: 100%; height: auto;")
   },
   minWidth = 300,
   headerStyle = list(textAlign = "center",
@@ -325,18 +324,16 @@ tabla <- reactable(
 
 
 
-# Crear un contenedor separado para los encabezados
 tabla_con_scroll <- tabla %>% htmltools::tags$div(
   style = "height: 800px; overflow-y: auto; border: 1px solid #ddd; padding: 10px;",
 )
 
-# Mostrar la tabla con scroll y encabezado fijo
 tabla_con_scroll
 ```
 
 ### 2.3 Mapa Viviendas
 
-Finalmente, podemos también visualizar aquí la cantidad total de viviendas primarias y secundarias de cada municipio. Es interesante ver cómo la mayoría se concentra en el territorio litoral, cercano a la costa. De estos datos, y también con la ayuda de los anteriores, podemos también sacar la conclusión de que la mayor concentración poblacional también estará en el litoral.
+Finalmente, podemos visualizar aquí la cantidad total de viviendas primarias y secundarias de cada municipio. Es interesante ver cómo la mayoría se concentra en el territorio litoral, cercano a la costa. De estos datos, y también con la ayuda de los anteriores, podemos sacar la conclusión de que la mayor concentración poblacional está en el litoral.
 
 Para realizar mi gráfico, me he inspirado en [este](https://r-graph-gallery.com/web-choropleth-barchart-map.html){target="_blank"}. Para dejar algún comentario extra, este ha sido el gráfico más aburrido de hacer en cuanto a lo tedioso que ha sido manejar los datos, al no estar de manera idonea para realizar un *left_joint*.
 
