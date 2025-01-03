@@ -113,7 +113,7 @@ ggplot() +
 
 ## 2. Población y Viviendas
 
-En este apartado, dado que los datos relativos a los riesgos se calculan teniendo en cuenta, entre otras variables, teniendo en cuenta la población y las viviendas, se realizará una visualización de datos sobre la vivienda y la población municipal de la Comunidad Valenciana.
+En este apartado, dado que los datos relativos a los riesgos se calculan teniendo en cuenta, entre otras variables, la población y las viviendas, se realizará una visualización de datos sobre la vivienda y la población municipal de la Comunidad Valenciana.
 
 ### 2.1 Treemap Interactivo
 
