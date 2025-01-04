@@ -652,7 +652,7 @@ capas <- leaflet() %>%
   addLegend("bottomright", 
             pal = color_inu, 
             values = df_inu$percentil, 
-            title = "Percentiles Riesgo: 1 = Bajo",
+            title = "Cuartiles Riesgo: 1 = Bajo",
             opacity = 1,
             group = "Riesgo Inundación",
             className = "info legend inundación-legend") %>%
@@ -679,7 +679,7 @@ capas <- leaflet() %>%
   addLegend("bottomright", 
             pal = color_int, 
             values = df_int$percentil, 
-            title = "Percentiles Riesgo: 1 = Bajo",
+            title = "Cuartiles Riesgo: 1 = Bajo",
             opacity = 1,
             group = "Riesgo Integrado",
             className = "info legend integrado-legend") %>%
@@ -706,7 +706,7 @@ capas <- leaflet() %>%
   addLegend("bottomright", 
             pal = color_pat, 
             values = df_pat$percentil, 
-            title = "Percentiles Riesgo: 1 = Muy Bajo",
+            title = "Quintiles Riesgo: 1 = Muy Bajo",
             opacity = 1,
             group = "Riesgo PATRICOVA",
             className = "info legend patricova-legend") %>%
