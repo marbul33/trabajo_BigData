@@ -624,7 +624,7 @@ capas <- leaflet() %>%
 #- Capa DANA
   addWMSTiles(
     baseUrl = "https://terramapas.icv.gva.es/00_DANA2024",
-    layers = "DANA2024.DelimitacionAreaInundadaUV",
+    layers = "DANA2024.ZonasInundadas.HuellaInundacion",
     options = WMSTileOptions(format = "image/png", 
                              transparent = TRUE),
     group = "Zona DANA" 
