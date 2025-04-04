@@ -477,7 +477,7 @@ Para acceder al mapa en pantalla completa, pulsa [<mark>aquí</mark>](mapa_riesg
 :::
 
 ```{r}
-#| eval: true
+#| eval: false
 
 #- Datos RAW
 valencia <- esp_get_ccaa(ccaa = "Comunidad Valenciana")
