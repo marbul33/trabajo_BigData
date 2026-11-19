@@ -22,7 +22,6 @@ title-block-style: default
 title-block-banner-color: white
 code-fold: true
 eval: true
-output: true
 warning: false
 error: false  
 message: false
@@ -417,7 +416,7 @@ munis_ce <- stringdist_join(
   mode = "left"
 ) %>%
   filter(dist <= 0.1) %>%
-  select(name, value, geometry) %>%
+  dplyr::select(name, value, geometry) %>%
   sf::st_as_sf()
 
 munis_ce <- munis_ce %>%
@@ -476,18 +475,20 @@ Ahora solo queda estar unos cuantos minutos viendo qué correlaciones podemos en
 Para acceder al mapa en pantalla completa, pulsa [<mark>aquí</mark>](mapa_riesgos.html){target="_blank"}.
 :::
 
+
 ```{r}
-#| eval: false
+#| eval: false  
 
 #- Datos RAW
 valencia <- esp_get_ccaa(ccaa = "Comunidad Valenciana")
 df <- st_read("./datos/inundacion.gpkg")
 df_1 <- st_read("./datos/integrado.gpkg")
 df_2 <- read_sf("./datos/patricova.shp")
+
 #- Datos TIDY
 #- % daño efectivo anual propiedades / stock capital. T=100. Horizonte 2050 + ^NVM (lvl Mar)
 df_inu <- df %>%  
-  select(cod_ine,
+  dplyr::select(cod_ine,
          provincia,
          municipio,
          porcperd_e3) %>% 
@@ -513,7 +514,7 @@ color_inu <- colorFactor(
 )
 #- Riesgo Inundacion Integrado. T=100 + ^NVM. Horizonte 2050.
 df_int <- df_1 %>%
-  select(cod_ine,
+  dplyr::select(cod_ine,
          provincia,
          municipio,
          riesgo_e3) %>% 
@@ -535,7 +536,7 @@ color_int <- colorFactor(
 )
 #- Riesgo inundacion territorio. Peligrosidad inu + vulnerabilidad suelo. PATRICOVA prevención riesgo.
 df_pat <- df_2 %>%
-  select(leyenda,
+  dplyr::select(leyenda,
          geometry) %>%
   drop_na() %>% 
   dplyr::rename(riesgo = leyenda)
@@ -558,7 +559,7 @@ color_pat <- colorFactor(
 rm(df, df_1, df_2, df_3)
 #- Capas del mapa
 kapas <- c("Zona DANA", 
-           "Riesgo Inundación", 
+           "Riesgo Inundaci&oacute;n", 
            "Riesgo Integrado", 
            "Riesgo PATRICOVA")
 #- Transformar datos para que funcione (no se por que pero hay que hacerlo)
@@ -567,7 +568,7 @@ df_int <- st_transform(df_int, crs = 4326)
 df_pat <- st_transform(df_pat, crs = 4326)
 #- EL MAPA
 capas <- leaflet() %>%
-  addProviderTiles(providers$CartoDB.Positron, 
+  addProviderTiles(providers$Esri.WorldGrayCanvas, 
                    group = "Simple") %>%
   addTiles(group = "Normal") %>%
   addProviderTiles(providers$Esri.WorldImagery, 
@@ -621,15 +622,15 @@ capas <- leaflet() %>%
     )
   ) %>% 
   hideGroup(kapas) %>% 
-#- Capa DANA
-  addWMSTiles(
+#- Capa DANA (MODIFICADA 1/04/2025 razon: ya no iba el código antiguo porque llamaba al area de la dana desde un servicio de internet que parece que ya no va)
+     addWMSTiles(
     baseUrl = "https://terramapas.icv.gva.es/00_DANA2024",
     layers = "DANA2024.ZonasInundadas.HuellaInundacion",
     options = WMSTileOptions(format = "image/png", 
                              transparent = TRUE),
     group = "Zona DANA" 
     
-  ) %>% 
+  )   %>% 
   addLayersControl(
     baseGroups = c("Simple", 
                    "Normal", 
@@ -647,14 +648,14 @@ capas <- leaflet() %>%
               opacity = 1,
               weight = 2, 
               fillOpacity = 0.5,
-              group = "Riesgo Inundación",
+              group = "Riesgo Inundaci&oacute;n",
               label = ~riesgo) %>%
   addLegend("bottomright", 
             pal = color_inu, 
             values = df_inu$percentil, 
             title = "Cuartiles Riesgo: 1 = Bajo",
             opacity = 1,
-            group = "Riesgo Inundación",
+            group = "Riesgo Inundaci&oacute;n",
             className = "info legend inundación-legend") %>%
   onRender("
     function(el, x) {
@@ -740,13 +741,13 @@ saveWidget(capas, "mapa_riesgos.html", selfcontained = TRUE)
 
 Vamos a ver algunas conclusiones que pueden sacarse de todo lo anterior:
 
-1.  Al activar la capa **Riesgo PATRICOVA** y la capa **Zona DANA**, podemos ver como la mayoría de la zona afectada, ya estaba bajo indicadores de riesgo según el análisis realizado por el PATRICOVA.
+1. Al activar la capa **Riesgo PATRICOVA** y la capa **Zona DANA**, podemos ver como la mayoría de la zona afectada, ya estaba bajo indicadores de riesgo según el análisis realizado por el PATRICOVA.
 
-2.  Viendo las zonas que marca el **Riesgo Integrado** y el **Riesgo Inundación**, podemos entender por encima el posible daño que puede realizar el aumento del nivel del mar, dentro del escenario estático del análisis, a todas las viviendas y habitantes de la zona litoral (gráfico 2.3).
+2. Viendo las zonas que marca el **Riesgo Integrado** y el **Riesgo Inundación**, podemos entender por encima el posible daño que puede realizar el aumento del nivel del mar, dentro del escenario estático del análisis, a todas las viviendas y habitantes de la zona litoral (gráfico 2.3).
 
-3.  En el caso particular de mi pueblo, si activamos la capa **Riesgo PATRICOVA** y buscamos con la lupa Ondara, podemos ver varias zonas marcadas con diferentes riesgos. En las zonas marcadas en amarillo y negro, se sabe que hace algunas décadas efectivamente hubo una inundación en esa zona.
+3. En el caso particular de mi pueblo, si activamos la capa **Riesgo PATRICOVA** y buscamos con la lupa Ondara, podemos ver varias zonas marcadas con diferentes riesgos. En las zonas marcadas en amarillo y negro, se sabe que hace algunas décadas efectivamente hubo una inundación en esa zona.
 
-4.  ¿Qué conclusiones puedes sacar tú con toda esta información?
+4. ¿Qué conclusiones puedes sacar tú con toda esta información?
 
 ### Información sobre la sesión
 
